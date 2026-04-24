@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Las Leyes de Mendel | Infografía interactiva</title>
+    <!-- Librería para generar código QR desde el navegador -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #c0cfb2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+            font-family: 'Segoe UI', 'Roboto', 'Georgia', 'Times New Roman', serif;
+        }
+
+        /* Contenedor principal estilo papel - A4 horizontal */
+        .infografia {
+            max-width: 1200px;
+            width: 100%;
+            background: #fffef7;
+            border-radius: 28px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            padding: 30px 35px;
+            transition: 0.2s;
+        }
+
+        /* TÍTULO PRINCIPAL */
+        .titulo-principal {
+            text-align: center;
+            border-bottom: 5px solid #2e6b2f;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .titulo-principal h1 {
+            font-size: 2.8rem;
+            color: #1a4d1a;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+        .subtitulo {
+            text-align: center;
+            font-size: 1rem;
+            color: #42633b;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* SECCIÓN MENDEL (intro) */
+        .mendel-intro {
+            background: #eaf7ea;
+            padding: 14px 20px;
+            border-radius: 50px;
+            margin: 20px 0 25px 0;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1rem;
+            border-left: 8px solid #4caf50;
+            border-right: 8px solid #4caf50;
+        }
+        .mendel-intro strong {
+            color: #1f4f1f;
+        }
+
+        /* CONTENEDOR DOS COLUMNAS */
+        .flex-leyes {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+        .card-ley {
+            flex: 1;
+            background: #fffdf5;
+            border-radius: 32px;
+            padding: 18px 22px;
+            border: 1px solid #dcd79a;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+        .card-ley:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Números de paso y estilo */
+        .paso-titulo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #2e6b2f;
+            border-left: 6px solid #f9a825;
+            padding-left: 12px;
+            margin: 18px 0 8px 0;
+        }
+        .primer-paso {
+            margin-top: 0;
+        }
+        .cruce-linea {
+            background: #fef2db;
+            padding: 10px;
+            border-radius: 24px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+        .cuadro-punnett {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        td, th {
+            border: 2px solid #9aa86b;
+            padding: 8px 18px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        th {
+            background: #e0ecca;
+        }
+        .semilla-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0efdf;
+            padding: 4px 14px;
+            border-radius: 40px;
+            margin: 0 4px;
+        }
+        .circulo-amarillo {
+            width: 20px;
+            height: 20px;
+            background: #fbc02d;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .circulo-verde {
+            width: 20px;
+            height: 20px;
+            background: #81c784;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .resultado-ratio {
+            background: #dfebd5;
+            padding: 10px;
+            border-radius: 24px;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0 5px;
+        }
+
+        /* CLAVE SÍMBOLOS */
+        .clave-simbolos {
+            background: #f7f3e0;
+            border-radius: 32px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .clave-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+        }
+        .clave-color {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+        .amarillo-bg { background: #fbc02d; }
+        .verde-bg { background: #66bb6a; }
+
+        /* IDEAS CLAVE */
+        .ideas-clave {
+            background: #e1f0e1;
+            border-radius: 28px;
+            padding: 15px 25px;
+            margin: 15px 0 20px;
+            border-left: 12px solid #2e7d32;
+        }
+        .ideas-clave h3 {
+            color: #1b5e20;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        .ideas-clave ul {
+            margin-left: 24px;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* LABORATORIO + QR */
+        .laboratorio {
+            background: linear-gradient(135deg, #e8f0e3, #d4e2ca);
+            border-radius: 36px;
+            padding: 18px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .lab-texto {
+            flex: 2;
+        }
+        .lab-texto h3 {
+            color: #1b4d1b;
+            font-size: 1.5rem;
+        }
+        .lab-boton {
+            background: #2e7d32;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.2s;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .lab-boton:hover {
+            background: #1b5e20;
+            transform: scale(1.02);
+        }
+        .qr-code {
+            flex: 1;
+            text-align: center;
+            background: white;
+            padding: 12px;
+            border-radius: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .qr-code p {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #2e4d2e;
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+        }
+
+        .creditos-apa {
+            font-size: 0.7rem;
+            text-align: center;
+            border-top: 1px solid #cdc88a;
+            margin-top: 25px;
+            padding-top: 15px;
+            color: #5a5a3a;
+        }
+        @media (max-width: 800px) {
+            .infografia {
+                padding: 18px;
+            }
+            .clave-simbolos {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .laboratorio {
+                flex-direction: column;
+            }
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .infografia {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 0.5cm;
+            }
+            .lab-boton {
+                background: #2e7d32;
+                color: white;
+                text-decoration: none;
+            }
+            .qr-code {
+                border: 1px solid #aaa;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="infografia">
+    <div class="titulo-principal">
+        <h1>🌱 LAS LEYES DE MENDEL 🧬</h1>
+        <div class="subtitulo">El origen de la genética moderna</div>
+    </div>
+
+    <div class="mendel-intro">
+        <strong>Gregor Mendel (1822–1884)</strong> fue un monje y científico que descubrió las leyes de la herencia estudiando plantas de guisante.
+    </div>
+
+    <div class="flex-leyes">
+        <!-- PRIMERA LEY -->
+        <div class="card-ley">
+            <h2 style="color:#2e6b2f; text-align:center;">1. PRIMERA LEY DE MENDEL</h2>
+            <h3 style="text-align:center; font-size:1rem;">(LEY DE LA UNIFORMIDAD)</h3>
+            <p style="margin:12px 0; font-size:0.9rem;">Cuando se cruzan dos líneas puras (homocigotas) que difieren en un carácter, todos los individuos de la primera generación (F₁) son iguales entre sí y se parecen a uno de los padres (el dominante).</p>
+            <div class="paso-titulo primer-paso">🔬 PASO A PASO</div>
+            <div class="cruce-linea">
+                <strong>P₁ Generación (parental)</strong><br>
+                <span class="semilla-badge"><span class="circulo-amarillo"></span> Línea pura amarilla (AA)</span>  ✖  <span class="semilla-badge"><span class="circulo-verde"></span> Línea pura verde (aa)</span>
+            </div>
+            <div class="cuadro-punnett">
+                <table>
+                    <tr><th></th><th>A</th><th>A</th></tr>
+                    <tr><th>a</th><td>Aa</td><td>Aa</td></tr>
+                    <tr><th>a</th><td>Aa</td><td>Aa</td></tr>
+                </table>
+            </div>
+            <div class="cruce-linea">
+                <strong>F₁ Generación (híbridos)</strong><br>
+                100% Aa → <span class="semilla-badge"><span class="circulo-amarillo"></span> Semillas amarillas (dominante)</span>
+            </div>
+            <div class="resultado-ratio">
+                ✅ Conclusión: Toda la F₁ es igual (amarilla) y tiene el genotipo Aa.
+            </div>
+        </div>
+
+        <!-- SEGUNDA LEY -->
+        <div class="card-ley">
+            <h2 style="color:#f9a825; text-align:center;">2. SEGUNDA LEY DE MENDEL</h2>
+            <h3 style="text-align:center; font-size:1rem;">(LEY DE LA SEGREGACIÓN)</h3>
+            <p style="margin:12px 0; font-size:0.9rem;">Al formarse los gametos, los dos alelos de un carácter se separan (se segregan). Al cruzarse los híbridos de la F₁, los alelos se combinan al azar y reaparece el carácter recesivo en la F₂.</p>
+            <div class="paso-titulo primer-paso">🔬 PASO A PASO</div>
+            <div class="cruce-linea">
+                <strong>Cruce de la F₁ (híbridos):</strong> Aa  ✖  Aa
+            </div>
+            <div class="cuadro-punnett">
+                <table>
+                    <tr><th></th><th>A</th><th>a</th></tr>
+                    <tr><th>A</th><td>AA</td><td>Aa</td></tr>
+                    <tr><th>a</th><td>Aa</td><td>aa</td></tr>
+                </table>
+            </div>
+            <div class="resultado-ratio">
+                <strong>Resultados F₂:</strong><br>
+                📊 Genotipos: 1 AA : 2 Aa : 1 aa &nbsp;&nbsp;|&nbsp;&nbsp; 🌿 Fenotipos: 3 Amarillas : 1 Verde
+            </div>
+            <div class="resultado-ratio" style="background:#f9eeca;">
+                🧬 Conclusión: Los alelos se separan en los gametos y se combinan al azar. Reaparece el carácter recesivo (verde).
+            </div>
+        </div>
+    </div>
+
+    <!-- CLAVE DE SÍMBOLOS -->
+    <div class="clave-simbolos">
+        <div class="clave-item"><div class="clave-color amarillo-bg"></div> AA = homocigoto dominante</div>
+        <div class="clave-item"><div class="clave-color verde-bg"></div> aa = homocigoto recesivo</div>
+        <div class="clave-item"><div class="clave-color amarillo-bg" style="background:#fbc02d;"></div> Aa = heterocigoto</div>
+        <div class="clave-item"><span class="circulo-amarillo"></span> = Amarillo (dominante)</div>
+        <div class="clave-item"><span class="circulo-verde"></span> = Verde (recesivo)</div>
+    </div>
+
+    <!-- IDEAS CLAVE -->
+    <div class="ideas-clave">
+        <h3>💡 IDEAS CLAVE</h3>
+        <ul>
+            <li>Sus experimentos fueron <strong>cuantitativos</strong>: contó y analizó muchos descendientes.</li>
+            <li>Estudió <strong>7 características</strong> (color, forma de semilla, color de flor, forma de vaina, etc.).</li>
+            <li>Sus leyes son la <strong>base de la genética moderna</strong> y siguen vigentes hoy en día.</li>
+        </ul>
+    </div>
+
+    <!-- LABORATORIO DE PRÁCTICA + QR -->
+    <div class="laboratorio">
+        <div class="lab-texto">
+            <h3>🧪 LABORATORIO DE PRÁCTICA / PRUEBA FINAL</h3>
+            <p>Ingresa al laboratorio interactivo para practicar y prepararte para tu última prueba.</p>
+            <a href="https://view.genially.com/69e8e4ffd773c014dc535e71" target="_blank" rel="noopener noreferrer" class="lab-boton">🔬 Ir al laboratorio en Genially</a>
+        </div>
+        <div class="qr-code">
+            <div id="qrcode"></div>
+            <p>📱 Escanea y accede al laboratorio Mendel</p>
+        </div>
+    </div>
+
+    <div class="creditos-apa">
+        📖 Infografía basada en el contenido original de Mendel. Recurso educativo con formato A4.  
+        Enlace a Genially: <a href="https://view.genially.com/69e8e4ffd773c014dc535e71" target="_blank">https://view.genially.com/69e8e4ffd773c014dc535e71</a><br>
+        Cita de IA generativa (APA): OpenAI. (2025). ChatGPT (Versión 4) – asistencia en estructura HTML, diseño y código QR. Contenido científico fiel a Mendel (1865).
+    </div>
+</div>
+
+<!-- Generación del QR dinámico con la URL correcta -->
+<script>
+    window.addEventListener('load', function() {
+        var urlGenially = "https://view.genially.com/69e8e4ffd773c014dc535e71";
+        var qrcodeContainer = document.getElementById("qrcode");
+        if (typeof QRCode !== "undefined") {
+            new QRCode(qrcodeContainer, {
+                text: urlGenially,
+                width: 110,
+                height: 110,
+                colorDark: "#1b4d1b",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        } else {
+            qrcodeContainer.innerHTML = '<p style="font-size:12px;">🔲 QR (código manual)<br><a href="'+urlGenially+'" target="_blank">Abrir enlace</a></p>';
+        }
+    });
+</script>
+</body>
+</html>
